@@ -1,0 +1,25 @@
+x-restart-policy: &restart_policy
+  restart: unless-stopped
+
+# version 3.4 or higher is required for referencing in yml
+version: '3.4'
+
+services:
+  filebrowser:
+    image: filebrowser/filebrowser  # :80
+    <<: *restart_policy
+    volumes:
+      - ./filebrowser/database:/database
+      - ./filebrowser/settings.json:/.filebrowser.json
+      - ./drive:/srv
+    env_file:
+      - .env.docker
+
+  caddy:
+    image: caddy  # :80 :2019
+    <<: *restart_policy
+    ports:
+      - "80:80"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./blog:/www

@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  blog:
+    image: pierrezemb/gostatic
+    volumes:
+      - ./blog:/srv/http:ro
+      - ./blog_headerConfig.json:/config/headerConfig.json:ro
+    ports:
+      - "80:8043"

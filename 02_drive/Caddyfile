@@ -1,0 +1,12 @@
+:80 {
+    # drive
+    route /pan {
+        reverse_proxy filebrowser:80
+    }
+    route /pan/* {
+        reverse_proxy filebrowser:80
+    }
+    # static
+    root * /www
+    file_server
+}

@@ -1,0 +1,40 @@
+{
+    servers {
+    	metrics
+    }
+    admin :2019
+}
+
+(mybasicauth) {
+    basicauth {
+        {$FB_USERNAME} {$FB_PASSWORD}
+    }
+}
+
+:80 {
+    # monitoring
+    route /prometheus {
+        import mybasicauth
+        reverse_proxy prometheus:9090
+    }
+    route /prometheus/* {
+        import mybasicauth
+        reverse_proxy prometheus:9090
+    }
+    route /grafana {
+        reverse_proxy grafana:3000
+    }
+    route /grafana/* {
+        reverse_proxy grafana:3000
+    }
+    # drive
+    route /pan {
+        reverse_proxy filebrowser:80
+    }
+    route /pan/* {
+        reverse_proxy filebrowser:80
+    }
+    # static
+    root * /www
+    file_server
+}
