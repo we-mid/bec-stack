@@ -1,0 +1,64 @@
+# my global config
+global:
+  # scrape_interval: 5s  # only for debugging !!!
+  # scrape_interval: 15s  # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  # evaluation_interval: 15s  # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+    node: "my-node-1"
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+# rule_files:
+#   - "first.rules"
+#   - "second.rules"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: prometheus
+    metrics_path: /prometheus/metrics
+    static_configs:
+      - targets: ["prometheus:9090"]
+
+  # https://grafana.com/grafana/dashboards/13460-caddy/
+  # https://grafana.com/grafana/dashboards/14280-caddy-exporter/
+  # https://caddyserver.com/docs/metrics
+  # https://thedevelopercafe.com/articles/monitoring-caddy-with-prometheus-and-grafana-2f1f869097d8
+  # - job_name: caddy
+  #   static_configs:
+  #     - targets: ["caddy:2019"]
+
+  # https://grafana.com/grafana/dashboards/14900-nginx/
+  # https://github.com/nginxinc/nginx-prometheus-exporter
+  - job_name: nginx-metrics
+    static_configs:
+      - targets: ["nginx-exporter:9113"]
+
+  # https://grafana.com/grafana/dashboards/249-named-processes/
+  # https://grafana.com/grafana/dashboards/13882-process-exporter-dashboard-with-treemap/
+  # https://github.com/ncabatoff/process-exporter
+  - job_name: process-exporter
+    static_configs:
+      - targets: ["process-exporter:9256"]
+
+  # https://grafana.com/grafana/dashboards/1860-node-exporter-full/
+  # https://github.com/prometheus/node_exporter
+  - job_name: node-exporter
+    static_configs:
+      - targets: ["node-exporter:9100"]
+      # - targets: ["host.docker.internal:9100"]
+
+  # https://docs.docker.com/config/daemon/prometheus/
+  # - job_name: docker
+  #   static_configs:
+  #     - targets: ["host.docker.internal:9323"]
+
+  # https://grafana.com/grafana/dashboards/12745-pm2-dashboard/
+  # https://github.com/saikatharryc/pm2-prometheus-exporter
+  - job_name: pm2-metrics
+    static_configs:
+      - targets: ["host.docker.internal:9209"]
